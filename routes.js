@@ -63,7 +63,6 @@ const authenticateUser = async (req, res, next) => {
 
 // USER ROUTES
 
-
 //This is the route that will get a list of users
 router.get('/users', authenticateUser, (req, res) => {
   res.json(req.currentUser);
@@ -93,10 +92,10 @@ router.post('/users', asyncHandler(async(req, res) => {
 
   if(errors.length == 0){
     await User.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      emailAddress: req.body.emailAddress,
-      password: bcryptjs.hashSync(req.body.password)
+      firstName: requestData.firstName,
+      lastName: requestData.lastName,
+      emailAddress: requestData.emailAddress,
+      password: bcryptjs.hashSync(requestData.password)
     })
 
     res.status(201).location('/').end();
@@ -113,20 +112,18 @@ router.post('/users', asyncHandler(async(req, res) => {
 router.get('/courses', async (req, res, next) =>{
   console.log('this is the courses route');
   try {
-      const courses = await Course.findAll({
-          attributes: {
-              include: ['id','title','description','estimatedTime','materialsNeeded'],
-              exclude: ['userId','createdAt','updatedAt']
-          },
-          include: [{
-                  model: User,
-                  attributes: {
-                      include:['id','firstName','lastName','emailAddress'],
-                      exclude:['password','createdAt','updatedAt']
-                  }
-          }]
-      });
-      res.status(200).json(courses);
+    const courses = await Course.findAll({
+      attributes: {
+        include: ['id','title','description','estimatedTime','materialsNeeded'],
+      },
+      include: [{
+        model: User,
+        attributes: {
+          include:['id','firstName','lastName','emailAddress'],
+        }
+      }]
+    });
+    res.status(200).json(courses);
   }
   catch (err) {
       next(err);
