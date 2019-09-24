@@ -44,7 +44,7 @@ const authenticateUser = async (req, res, next) => {
           where: {emailAddress: credentials.name}
         })
       } else {
-        message = `Authentication error for username: ${user.emailAddress}`;
+        message = `Authentication error for email address: ${user.emailAddress}`;
       }
     } else {
       message = `User not found for username: ${credentials.name}`;
