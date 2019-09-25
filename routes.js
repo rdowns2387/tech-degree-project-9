@@ -95,6 +95,7 @@ router.post('/users', asyncHandler(async(req, res) => {
       firstName: requestData.firstName,
       lastName: requestData.lastName,
       emailAddress: requestData.emailAddress,
+      //hash the password when user is created
       password: bcryptjs.hashSync(requestData.password)
     })
 
